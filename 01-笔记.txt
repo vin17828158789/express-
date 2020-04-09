@@ -1,0 +1,109 @@
+1. 什么是express？
+	express是基于Node.js的简易的、便捷的web开发框架
+	
+2. express安装使用
+	1) 全局安装 express-generator
+		目的：提供一个全局命令 express
+		npm i express-generator -g
+		
+	2) 创建项目
+		express -e 项目目录名
+		
+	3) 进入项目
+		cd 项目名称
+		
+	4) 安装依赖
+		npm i
+		
+	5) 启动项目
+		npm start
+		
+	6) 测试
+		在浏览器中输入 localhost 或 127.0.0.1
+		端口默认是：3000
+		
+3. 项目结构
+	1) 文件夹
+		bin	可执行文件夹
+			www	项目启动文件
+			
+		public	公共的静态文件，用于放置静态的网页资源
+			html, css, js, 图片等资源
+			
+		routes	动态路由文件夹，用于放置所有的动态路由模块文件
+			index.js
+			user.js
+		
+		views	视图模板文件夹，用于放置所有的ejs后端模板
+		
+	2) 文件
+		app.js	项目主文件
+		package.json	包描述文件
+		
+4. express路由
+	1) 什么是路由？
+		路由就是网页的地址（URL），通过不同的网址，访问到对应的内容，这个行为就叫路由
+		前端路由：前端路由就是hash值，通过监控hash值的改变，利用ajax加载对应的内容
+		后端路由：通过不同的网址变化，浏览器加载不同的网页，叫后端路由
+		
+	2) Router路由类
+		使用 express.Router类可以创建出 可挂载的路由对象 router
+		
+		大路由：app.js	所有的请求都必须经过这个路由
+		子路由：routes下的所有路由， index.js users.js
+		
+	3) 编写独立的路由模块
+		需求：创建一个 vip路由模块，实现对 /vip/所有请求进行处理
+			第一步：在routes下创建vip.js文件
+			第二步：模仿users.js编写路由线路
+			第三步：暴露路由对象
+			第四步：打开app.js引入子路由，分配请求给该路由处理
+			
+		var express=require('express');
+		var router=express.Router();
+		
+		//编写路由线路
+		router.get('/show.html', function(req, res){
+			res.send('<h1>所有的 VIP会员列表</h1>');
+		});
+		
+		module.exports=router; //暴露已经挂载好的路由对象
+		
+5. 响应对象  res
+	1) 什么是响应对象？
+		响应对象是express框架用于响应数据给客户端浏览器的一个对象
+		
+	2) 响应对象的方法
+		a. send方法（重点）
+			res.send('字符串');
+			res.send({对象});
+			res.status(404).send("<h1>404 Not Found</h1>");
+			
+			注意：不能返回数字，会当成是状态码
+				 不能调用多次send()方法
+
+		b. json方法
+			res.json({对象});
+			
+		c. render方法
+			res.render('模板名称', {数据});
+			
+		d. redirect方法
+			res.redirect('目标网址');
+			
+		e. download方法
+			res.download('下载文件的路径');
+			
+6. 请求对象 req
+	1) 什么是请求对象？
+		请求对象是指客户端向服务器端发送的所有数据，都包含在这个对象内
+		
+	2) 请求对象的属性和方法
+		a. 获取get方式传的值
+			req.query.参数名;	
+	
+		b. 获取post方式传的值
+			req.body.参数名;
+			
+		c. 获取路由中的参数
+			req.params.参数名
